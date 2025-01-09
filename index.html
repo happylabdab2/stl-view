@@ -26,9 +26,10 @@
     </select>
 
     <script type="module">
-        import * as THREE from 'https://unpkg.com/three/build/three.module.js';
-        import { OrbitControls } from 'https://unpkg.com/three/build/examples/jsm/controls/OrbitControls.js';
-        import { STLLoader } from 'https://unpkg.com/three/build/examples/jsm/loaders/STLLoader.js';
+        import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.120.1/build/three.module.js';
+        import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.120.1/examples/jsm/controls/OrbitControls.js'
+        import { STLLoader } from 'https://cdn.jsdelivr.net/npm/three@0.120.1/examples/jsm/loaders/STLLoader.js';
+
 
         const stl_urls = [
             'https://happylabdab2.github.io/stl-view/Tophat.stl',
@@ -45,7 +46,7 @@
         document.body.appendChild(renderer.domElement);
 
         // Orbit controls
-        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        const controls = new OrbitControls(camera, renderer.domElement);
 
         // Lighting
         const ambientLight = new THREE.AmbientLight(0x404040); // soft white light
@@ -56,7 +57,7 @@
         scene.add(directionalLight);
 
         // STL loader and dropdown logic
-        const loader = new THREE.STLLoader();
+        const loader = new STLLoader();
         const dropdown = document.getElementById('dropdown');
 
         stl_urls.forEach((url, index) => {
