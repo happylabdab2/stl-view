@@ -25,13 +25,14 @@
         <!-- Dropdown menu items will be dynamically added -->
     </select>
 
-    <script type="module">
-        import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js';
-        import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/controls/OrbitControls.js';
-        import { STLLoader } from 'https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/loaders/STLLoader.js';
+    <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/examples/js/loaders/STLLoader.js"></script>
 
+    <script>
         const stl_urls = [
             'https://happylabdab2.github.io/stl-view/Tophat.stl',
+
         ];
 
         // Scene, camera, and renderer setup
@@ -44,7 +45,7 @@
         document.body.appendChild(renderer.domElement);
 
         // Orbit controls
-        const controls = new OrbitControls(camera, renderer.domElement);
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
 
         // Lighting
         const ambientLight = new THREE.AmbientLight(0x404040); // soft white light
@@ -55,7 +56,7 @@
         scene.add(directionalLight);
 
         // STL loader and dropdown logic
-        const loader = new STLLoader();
+        const loader = new THREE.STLLoader();
         const dropdown = document.getElementById('dropdown');
 
         stl_urls.forEach((url, index) => {
@@ -85,11 +86,18 @@
         };
 
         dropdown.addEventListener('change', (event) => {
-            loadSTL(event.target.value);
+            const selectedUrl = event.target.value;
+            loadSTL(selectedUrl);
+            window.location.hash = stl_urls.indexOf(selectedUrl);
         });
 
-        // Initial load
-        if (stl_urls.length > 0) {
+        // Preload based on URL hash
+        const hashIndex = parseInt(window.location.hash.substring(1));
+        if (!isNaN(hashIndex) && hashIndex >= 0 && hashIndex < stl_urls.length) {
+            dropdown.value = stl_urls[hashIndex];
+            loadSTL(stl_urls[hashIndex]);
+        } else if (stl_urls.length > 0) {
+            // Default to the first model if no valid hash
             loadSTL(stl_urls[0]);
         }
 
